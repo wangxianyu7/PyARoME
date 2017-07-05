@@ -9,5 +9,5 @@ To compile the module simply do:
 
 	`python setup.py install`
 
-There is a test file `test.py` included that illustrates the usage and can be used that things work. To run that test file you will also need to install the `ajplanet` module.
+There is a test file `test.py` included that illustrates the usage and can be used to check that things work allright. To run that test file you will also need to install the `ajplanet` module.
 
