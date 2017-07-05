@@ -1,5 +1,5 @@
 # PyARoME
-Python interface to the ARoME library. The interface is done using an old Numpy C API which is deprecated, but it still works. 
+Python interface to the ARoME library (http://www.astro.up.pt/resources/arome/). The interface uses an old Numpy C API which is deprecated, but it still works. The ARoME library is described in the following paper: https://ui.adsabs.harvard.edu/#abs/2013A&A...550A..53B/abstract
 
 
 Installation
@@ -9,5 +9,5 @@ To compile the module simply do:
 
 	`python setup.py install`
 
-There is a test file 'test.py' included that illustrates the usage. To run that you will also need to install the `ajplanet` module.
+There is a test file `test.py` included that illustrates the usage and can be used that things work. To run that test file you will also need to install the `ajplanet` module.
 
