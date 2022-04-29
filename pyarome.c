@@ -14,17 +14,37 @@ static PyMethodDef module_methods[] = {
     {NULL, NULL, 0, NULL}
 };
 
+#if PY_MAJOR_VERSION >= 3
+
+static struct PyModuleDef ModDefPyArome = {
+    PyModuleDef_HEAD_INIT,
+    "pyarome", module_docstring,
+    -1,
+    module_methods
+};
+
+PyMODINIT_FUNC PyInit_pyarome(void) {
+    PyObject *m = PyModule_Create(&ModDefPyArome);
+    if(m==NULL) return NULL;
+    /* IMPORTANT: this must be called */
+    import_array();
+    if (PyErr_Occurred()) return NULL;
+    return m;
+}
+
+#
+
+#else
 PyMODINIT_FUNC initpyarome(void)
 {
     PyObject *m = Py_InitModule3("pyarome", module_methods, module_docstring);
     if (m == NULL)
         return;
-
     /* Load `numpy` functionality. */
     import_array();
 }
+#endif
 
-  
 
 static PyObject *pyarome_RM(PyObject *self,PyObject *args){
 
@@ -39,8 +59,11 @@ static PyObject *pyarome_RM(PyObject *self,PyObject *args){
   if (!PyArg_ParseTuple(args, "dOdddddddddddddd", &lambda, &t_obj, &P, &i, &e,
 			&omega, &tc, &a, &u1, &u2, &beta0, &Vsini, &sigma0, &zeta, &Kmax, &Rp))
     return NULL;
-
+  #if PY_MAJOR_VERSION >= 3
+  PyObject *t_array = PyArray_FROM_OTF(t_obj, NPY_DOUBLE, NPY_ARRAY_IN_ARRAY);
+  #else
   PyObject *t_array = PyArray_FROM_OTF(t_obj, NPY_DOUBLE, NPY_IN_ARRAY);
+  #endif
 
   /* If that didn't work, throw an exception. */
   if (t_array == NULL) {
@@ -52,7 +75,7 @@ static PyObject *pyarome_RM(PyObject *self,PyObject *args){
   int N = (int)PyArray_DIM(t_array, 0);
   double tab_x[N], tab_y[N], tab_z[N];
   double tab_v_CCF[N], tab_v_iodine[N];
-  
+
   /* Get pointers to the data as C-types. */
   double *t    = (double*)PyArray_DATA(t_array);
 
@@ -91,17 +114,17 @@ static PyObject *pyarome_RM(PyObject *self,PyObject *args){
   /* get the RM signals */
   status += arome_mget_RM_CCF(parome, N, tab_v_CCF);
   status += arome_mget_RM_iodine(parome, N, tab_v_iodine);
-  
+
   if (status) {
     PyErr_SetString(PyExc_RuntimeError,
 		    "ARoME returned status != 0");
     return NULL;
   }
-  
+
   int nd = 1;
   npy_intp *dims = PyDimMem_NEW(1);
   dims[0] = N;
-				     
+
   /* Build return values */
 
   PyArrayObject *CCF_out = (PyArrayObject *) PyArray_SimpleNew(nd,dims,NPY_DOUBLE);
@@ -110,7 +133,7 @@ static PyObject *pyarome_RM(PyObject *self,PyObject *args){
   /* get pointers to data of Objects above */
   double *ccf_out_p    = (double*)PyArray_DATA(CCF_out);
   double *iodine_out_p    = (double*)PyArray_DATA(iodine_out);
-  
+
   /* copy arrays */
 
   for (l=0;l<N;l++){
@@ -125,9 +148,9 @@ static PyObject *pyarome_RM(PyObject *self,PyObject *args){
 
   arome_mfree(parome);
   arome_free(parome);
-   
+
   /* return */
   PyObject *ret = Py_BuildValue("OOd", CCF_out,iodine_out,t0);
   return ret;
-  
+
 }
