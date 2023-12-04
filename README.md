@@ -7,7 +7,7 @@ Installation
 
 ### Install ARoME from http://www.astro.up.pt/resources/arome/
 ```bash
-wget [Version 1.0.0](http://www.astro.up.pt/resources/arome/files/arome-1.0.0.tar.gz)
+wget http://www.astro.up.pt/resources/arome/files/arome-1.0.0.tar.gz
 tar zxvf arome-1.0.0.tar.gz
 cd arome-1.0.0
 #execute the following statements to install your library in the default directory  /usr/local 
