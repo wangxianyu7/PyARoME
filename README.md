@@ -5,9 +5,10 @@ Python interface to the ARoME library (http://www.astro.up.pt/resources/arome/).
 Installation
 ------------
 
-To compile the module simply do:
+### Install ARoME from http://www.astro.up.pt/resources/arome/
+
+
+### compile the module simply do:
 
 	`python setup.py install`
-
-There is a test file `test.py` included that illustrates the usage and can be used to check that things work allright. To run that test file you will also need to install the `ajplanet` module.
 
