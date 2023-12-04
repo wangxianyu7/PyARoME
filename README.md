@@ -11,10 +11,10 @@ wget [Version 1.0.0](http://www.astro.up.pt/resources/arome/files/arome-1.0.0.ta
 tar zxvf arome-1.0.0.tar.gz
 cd arome-1.0.0
 #execute the following statements to install your library in the default directory  /usr/local 
- ./configure --disable-shared
- make 
- make check
- make install
+./configure --disable-shared
+make 
+make check
+make install
 
 ```
 
