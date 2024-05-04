@@ -3,12 +3,16 @@ import numpy.distutils.misc_util
 from setuptools import setup, Extension
 from setuptools.command.build_ext import build_ext
 import numpy
+import platform
+
 class build_ext_arch(build_ext):
     def build_extensions(self):
-        if self.compiler.compiler_type == 'unix':
-            for e in self.extensions:
-                e.extra_compile_args = ['-arch', 'arm64']
-                e.extra_link_args = ['-arch', 'arm64']
+        # Check if the system's architecture is ARM64
+        if platform.machine() == 'arm64':
+            if self.compiler.compiler_type == 'unix':
+                for e in self.extensions:
+                    e.extra_compile_args = ['-arch', 'arm64']
+                    e.extra_link_args = ['-arch', 'arm64']
         super().build_extensions()
         
         
